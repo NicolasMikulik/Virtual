@@ -1,0 +1,2 @@
+ls: cannot access 'neexistujuci': No such file or directory
+subor
