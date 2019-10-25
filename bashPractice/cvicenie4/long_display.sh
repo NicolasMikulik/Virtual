@@ -6,34 +6,26 @@ user=$USER
 pgroup=0
 primary_gid=0
 
-if [ $# -eq 0 ] ; then
-	echo "No options or arguments provided"
-	exit 1
-fi
-
 print_groups(){
-	echo "test4"
 	grep "$1" /etc/group | cut -d ":" -f 1
 }
 print_primary(){
-	echo "test5"
 	primary_gid=$(grep "$1" /etc/passwd | cut -d ":" -f 4)
 	grep -w "${primary_gid}" /etc/group | cut -d ":" -f 1
 }
 while :; do
 	case "$1" in
 		-h)
-			echo "Usage: $0 -h [ -u user ] [ -g ]"
+			echo "Usage: $0 -h [ -g|--group ] [ -u|--user user ]"
 			exit 0
 			;;
 		--help)
-			echo "Usage: $0 -h --help [ -u|--user user ] [ -g|--group ]"
-			echo "-u chooses the entered user to show their groups"
-			echo "-g shows only primary group"
+			echo "Usage: $0 -h --help [ -g|--group] [ -u|--user user ]"
+			echo "-u or --user choose the entered user to show their groups. The user is set to the current user by default."
+			echo "-g or --group show only primary group of user"
 			exit 0
 			;;
 		-g|--group)
-			echo "test"
 			pgroup=1
 			shift
 			#group_id=`grep "^$(whoami)" /etc/passwd | cut -d ":" -f 4`
@@ -58,9 +50,7 @@ while :; do
 done
 if [ ${pgroup} -eq 0 ] ; then
 	print_groups "${user}"
-	echo "test2"
 else
-	echo "tes3t"
 	print_primary "${user}"
 fi
 
