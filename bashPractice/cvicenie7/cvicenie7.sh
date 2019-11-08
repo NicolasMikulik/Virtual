@@ -8,10 +8,10 @@ echo "scale=4 ; $mobiles / $lines * 100" | bc
 
 total=$(awk '{sum+=$10}; END{print sum/1024/1024}' ./access.log)
 totalbytes=$(awk '{for(i=1;i<=NF;i++){if($i ~ /HTTP\/1\./){totalbytes+= $(i+1)}}} END{print totalbytes}' access.log)
-mobbytes=$(awk '{for(i=1;i<=NF;i++){if($i ~ /HTTP\/1\./){n=$(i+1)} if($i ~ /Mobile/){sum+=n}}} END{print sum}' ./access.log)
+mobbytes=$(awk '{for(i=1;i<=NF;i++){if($i ~ /HTTP\/1\./){n=$(i+2)} if($i ~ /Mobile/){sum+=n}}} END{print sum/1024/1024}' ./access.log)
 
-printf "Total number of transferred bytes "$total"MB, "$mobbytes"B of which build up by mobile devices. Percentage "
-echo "scale=4; $mobbytes / $totalbytes * 100" | bc
+printf "Total number of transferred bytes "$total"MB, "$mobbytes"MB of which build up by mobile devices. Percentage "
+echo "scale=4; $mobbytes / $total * 100" | bc
 printf "\n10 most present IP addresses are\n:"
 awk '{print $1}' ./access.log | sort | uniq -c | sort -rn | head -10 | awk 'BEGIn { print "10 most present IP addresses: \n"} {print $2, "occured", $1, "times"}'
 printf "\nDNS entries for the most present IP addresses are:\n"
