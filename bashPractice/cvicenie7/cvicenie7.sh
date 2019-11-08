@@ -6,10 +6,11 @@ mobiles=$(awk '/Mobile/{mobiles++}; END{print mobiles+0}' ./access.log)
 printf "The file ./access.log contains "$lines" entries, "$mobiles" of which are built by mobile devices. Percentage " 
 echo "scale=4 ; $mobiles / $lines * 100" | bc
 
+total=$(awk '{sum+=$10}; END{print sum/1024/1024}' ./access.log)
 totalbytes=$(awk '{for(i=1;i<=NF;i++){if($i ~ /HTTP\/1\./){totalbytes+= $(i+1)}}} END{print totalbytes}' access.log)
 mobbytes=$(awk '{for(i=1;i<=NF;i++){if($i ~ /HTTP\/1\./){n=$(i+1)} if($i ~ /Mobile/){sum+=n}}} END{print sum}' ./access.log)
 
-printf "Total number of transferred bytes "$totalbytes"B, "$mobbytes"B of which build up by mobile devices. Percentage "
+printf "Total number of transferred bytes "$total"MB, "$mobbytes"B of which build up by mobile devices. Percentage "
 echo "scale=4; $mobbytes / $totalbytes * 100" | bc
 printf "\n10 most present IP addresses are\n:"
 awk '{print $1}' ./access.log | sort | uniq -c | sort -rn | head -10 | awk 'BEGIn { print "10 most present IP addresses: \n"} {print $2, "occured", $1, "times"}'
