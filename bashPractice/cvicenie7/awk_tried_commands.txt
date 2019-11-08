@@ -1,0 +1,14 @@
+Zobrazíme zoznam zamestnancov:
+awk 'BEGIN { print "zoznam zamestancov: \n"} { print "zamestanec: " $1 }' zamestnanci.txt
+(čo sa stane, ak vynechame BEGIN?) - "zoznam zamestnancov: \n" sa vypise pred kazdym zaznamom 
+
+Zobrazime riadky zamestnancov, ktorých mená sa začínaju na z (Pole $NF obsahuje posledné pole)
+awk /^z/ zamestnanci.txt - vypise zuza zapisovatelka 4300
+awk ' /^z/ { print $1 ":" $NF } ' zamestnanci.txt - vypise iba zuza:plat
+Zobrazíme zamestancov s platom nad 1000 a aj číslo riadku.
+awk '$NF > 1000 {print NR,$0}' zamestnanci.txt
+
+Spočítame priemerný plat:
+awk '{sum+=$NF} END { print "Priemerny plat = " sum/NR}' zamestnanci.txt - bez END sa vypise priemerny plat po kazdom zazname
+
+$0 - cely zaznam/riadok, awk '{ print $1 $0 }' zamestnanci.txt - vypise napr. ferofero programator 2500, teda $1,$2,... su brane bez medzier
