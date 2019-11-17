@@ -19,4 +19,8 @@ sed -n '/ozno/{=;p}' list.txt | sed '{N; s/\n/ /}'
 # sed -n 'p;n' list.txt # even numbered lines
 # sed -n '1,10p' list.txt # simulate head
 # sed -n '/mozno/p' list.txt # simulate grep
-
+# sed 'n;d' list.txt # odd lines
+# sed '1d;n;d' list.txt # even lines
+# sed -n 's/.*\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p' access.log
+# sed -n '/ozno/p' list.txt | sed 'n;d' 
+# sed '7,10d' list.txt
