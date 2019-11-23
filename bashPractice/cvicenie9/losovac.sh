@@ -10,9 +10,13 @@ if [ $# -eq 0 ]
 fi
 var=$(( ( RANDOM % "$x" ) + 1 ))
 echo "$var"
-trap 'echo "Hello number $var"' SIGUSR1
+this_script=$$
+trap 'echo "Hello number $var"
+        pkill -P $this_script sleep > /dev/null 2>&1' SIGUSR1 > /dev/null 2>&1
 while :
 do
-        sleep infinity
+        sleep infinity &
+        wait > /dev/null 2>&1
+        var=$(( ( RANDOM % "$x" ) + 1 ))
         echo "Hello $x participants"
 done
